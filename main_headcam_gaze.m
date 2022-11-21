@@ -14,10 +14,10 @@ for i = 1 : length(sub_list)
         rois{i}(:,1) = tmp1(:,2);
         rois{i}(:,2) = tmp2(:,2);
 
-        disp([rois{i}(:,1),rois{i}(:,2)]);
-%         index1 = find(abs(rois{i}(:,1)-rois{i}(:,2))==0);
-%         index2 = find(rois{i}(:,1)>0);
-%         match_ratio(i) = size(index1,1)/size(index2,1);
+        %disp([rois{i}(:,1),rois{i}(:,2)]);
+        index1 = find(abs(rois{i}(:,1)-rois{i}(:,2))==0);
+        index2 = find(rois{i}(:,1)>0);
+        match_ratio(i) = size(index1,1)/size(index2,1);
     end
     %rate = size(find((rois{i}(:,1)-rois{i}(:,1))==0))/size(tmp,1);
     %disp(rate);
