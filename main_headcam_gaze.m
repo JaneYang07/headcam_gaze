@@ -2,7 +2,7 @@ clear;
 exp_id = 12;
 obj_num = 24;
 
-sub_list = find_subjects({'cont_vision_size_obj1_child'},[exp_id]);
+sub_list = find_subjects({'cont_vision_size_obj9_child'},[exp_id]);
 
 for i = 1 : length(sub_list)
     tmp1 = get_variable_by_trial_cat(sub_list(i),'cstream_vision_size_obj-largest_child');
