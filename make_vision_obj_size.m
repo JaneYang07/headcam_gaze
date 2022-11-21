@@ -2,7 +2,7 @@ clear;
 exp_id = 12;
 obj_num = 24;
 
-sub_list = find_subjects({'cont_vision_obj1_child'},[12]);
+sub_list = find_subjects({'cont_vision_obj1_child'},[exp_id]);
 %sub_list = [1201 1202];
 
 for i = 1 : length(sub_list)
