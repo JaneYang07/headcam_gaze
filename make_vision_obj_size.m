@@ -31,48 +31,31 @@ for i = 1 : length(sub_list)
 
     % find the instances where the largest object is also in hand of
     % child/parent
-    cstream_large_objs = get_variable(sub_list(i),'cstream_vision_size_obj-largest_child');
+    % load all relevant variables
     roi = get_variable(sub_list(i),'cstream_eye_roi_child');
-
-
+    cstream_large_objs = get_variable(sub_list(i),'cstream_vision_size_obj-largest_child');
+    
     inhand_child_left = get_variable(sub_list(i),'cstream_inhand_left-hand_obj-all_child');
     inhand_child_right = get_variable(sub_list(i),'cstream_inhand_right-hand_obj-all_child');
     inhand_parent_left = get_variable(sub_list(i),'cstream_inhand_left-hand_obj-all_parent');
     inhand_parent_right = get_variable(sub_list(i),'cstream_inhand_right-hand_obj-all_parent');
 
-    
+    % align variables with roi's timestamp
     rois{i} = align_streams(roi(:,1), {cstream_large_objs,inhand_child_left,inhand_child_right,inhand_parent_left,inhand_parent_right});
 
-    A = cstream_large_objs(:,2);
-    B = inhand_child_left(:,2);
-    C = inhand_child_right(:,2);
+    % find matched condition
+    match_index_child_inhand = union(find(abs(rois{i}(:,1)-rois{i}(:,2))==0),find(abs(rois{i}(:,1)-rois{i}(:,3))==0));
+    match_index_parent_inhand = union(find(abs(rois{i}(:,1)-rois{i}(:,4))==0),find(abs(rois{i}(:,1)-rois{i}(:,5))==0));
 
+    % record instances when it's both inhand and it's the largest object
+    large_objs_child_inhand = [roi(:,1) zeros(size(roi,1),1)];
+    large_objs_parent_inhand = [roi(:,1) zeros(size(roi,1),1)];
 
-%     disp(i);
-%     match_index = union(find(abs(A-B)==0),find(abs(A-C)==0));
-
-
-
-
-    %large_inhand_child_left_index = find(abs(cstream_large_objs(:,2)-inhand_child_left(:,2))==0);
-%     both_child_hand = union(inhand_child_left,inhand_child_right);
-%     both_parent_hand = union(inhand_parent_left, inhand_parent_right);
-
-%     index3 = find(abs(data1-rois{i}(:,3))==0);
-%     index4 = find(abs(rois{i}(:,1)-rois{i}(:,4))==0);
-%     index_child_inhand = union(index3,index4);
-% 
-%     index1 = find(abs(rois{i}(index_child_inhand,1)-rois{i}(index_child_inhand,2))==0);
-%     index2 = find(rois{i}(index_child_inhand,2)>0);
-%     match_ratio(i,2) = size(index1,1)/size(index2,1);
-% 
-%     large_objs_child-inhand = [];
-%     large_objs_parent-inhand = [];
-
+    large_objs_child_inhand(match_index_child_inhand,2) = rois{i}(match_index_child_inhand,1);
+    large_objs_parent_inhand(match_index_parent_inhand,2) = rois{i}(match_index_parent_inhand,1);
     
-
+    record_additional_variable(sub_list(i),'cstream_vision_size_obj-largest-child-inhand', large_objs_child_inhand);
+    record_additional_variable(sub_list(i),'cstream_vision_size_obj-largest-parent-inhand', large_objs_parent_inhand);
 end
-
-% disp(max(obj_size{1},[],2));
 
 
