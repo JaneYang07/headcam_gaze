@@ -15,7 +15,7 @@ for i = 1 : length(sub_list)
     rois{i} = align_streams(tmp2(:,1),{tmp1,tmp2,inhand1,inhand2,inhand3,inhand4});
 
     index1 = find(abs(rois{i}(:,1)-rois{i}(:,2))==0);
-    index2 = find(rois{i}(:,2)>0);
+    index2 = find(rois{i}(:,2)>0);sub
     match_ratio(i,1) = size(index1,1)/size(index2,1);
 
     % match conditioned on child
