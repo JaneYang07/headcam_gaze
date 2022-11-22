@@ -25,6 +25,10 @@ for i = 1 : length(sub_list)
 %      data2 = [tmp(:,1) large_size];
 %     record_additional_variable(sub_list(i),'cont_vision_size_obj-largest-size_child', data2);
 
+
+    %%% TODO: generate an aligned version of obj-largest and compare it
+    %%% with original obj-largest in vis_streams
+
     % find the instances where the largest object is also in hand of
     % child/parent
     cstream_large_objs = get_variable(sub_list(i),'cstream_vision_size_obj-largest_child');

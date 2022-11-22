@@ -28,6 +28,7 @@ for i = 1 : length(sub_list)
     % find the instances where the largest object is also in hand of
     % child/parent
     cstream_large_objs = get_variable(sub_list(i),'cstream_vision_size_obj-largest_child');
+    roi = get_variable(sub_list(i),'cstream_eye_roi_child');
 
 
     inhand_child_left = get_variable(sub_list(i),'cstream_inhand_left-hand_obj-all_child');
@@ -35,10 +36,17 @@ for i = 1 : length(sub_list)
     inhand_parent_left = get_variable(sub_list(i),'cstream_inhand_left-hand_obj-all_parent');
     inhand_parent_right = get_variable(sub_list(i),'cstream_inhand_right-hand_obj-all_parent');
 
+    
+    rois{i} = align_streams(roi(:,1), {cstream_large_objs,inhand_child_left,inhand_child_right,inhand_parent_left,inhand_parent_right});
+
     A = cstream_large_objs(:,2);
     B = inhand_child_left(:,2);
     C = inhand_child_right(:,2);
-    D = intersect(A.);
+
+
+%     disp(i);
+%     match_index = union(find(abs(A-B)==0),find(abs(A-C)==0));
+
 
 
 
