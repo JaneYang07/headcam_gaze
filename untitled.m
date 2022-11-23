@@ -19,8 +19,8 @@ obj_num = 24;
 
 
 subexpIDs = find_subjects({'cont_vision_size_obj9_child'},[exp_id]);
-vars = {'cstream_eye_roi_child','cstream_inhand_left-hand_obj-all_child','cstream_inhand_right-hand_obj-all_child','cstream_vision_size_obj-largest-child-inhand','cstream_vision_size_obj-largest_child', 'cstream_inhand_right-hand_obj-all_parent','cstream_inhand_left-hand_obj-all_parent','cstream_vision_size_obj-largest-parent-inhand'};
-labels = {'c_roi','c_left', 'c_right','c_large','largest','p_right','p_left','p_large'};
+vars = {'cstream_inhand_left-hand_obj-all_child','cstream_inhand_right-hand_obj-all_child','cstream_vision_size_obj-largest-child-inhand','cstream_vision_size_obj-largest_child', 'cstream_eye_roi_child','cstream_inhand_right-hand_obj-all_parent','cstream_inhand_left-hand_obj-all_parent','cstream_vision_size_obj-largest-parent-inhand'};
+labels = {'c_roi','c_left', 'c_right','c_large','largest','c_roi','p_right','p_left','p_large'};
 args.window_times_variable = [0 200;200 400;400 600;];
 directory = '.';
 % note that directory = '.' will save in the current directory
