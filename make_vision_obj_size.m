@@ -54,8 +54,17 @@ for i = 1 : length(sub_list)
     large_objs_child_inhand(match_index_child_inhand,2) = rois{i}(match_index_child_inhand,1);
     large_objs_parent_inhand(match_index_parent_inhand,2) = rois{i}(match_index_parent_inhand,1);
     
-    record_additional_variable(sub_list(i),'cstream_vision_size_obj-largest-child-inhand', large_objs_child_inhand);
-    record_additional_variable(sub_list(i),'cstream_vision_size_obj-largest-parent-inhand', large_objs_parent_inhand);
+%     record_additional_variable(sub_list(i),'cstream_vision_size_obj-largest-child-inhand', large_objs_child_inhand);
+%     record_additional_variable(sub_list(i),'cstream_vision_size_obj-largest-parent-inhand', large_objs_parent_inhand);
+
+    % find matched condition: roi & largest obj
+    match_index_child_roi = find(abs(roi(:,2)-rois{i}(:,1))==0);
+    large_objs_child_roi = [roi(:,1) zeros(size(roi,1),1)];
+    large_objs_child_roi(match_index_child_roi,2) = rois{i}(match_index_child_roi,1);
+
+    record_additional_variable(sub_list(i),'cstream_eye-vision_largest-roi_child', large_objs_child_roi);
+    cevent_data1 = cstream2cevent(large_objs_child_roi);
+    record_additional_variable(sub_list(i),'cevent_eye-vision_largest-roi_child', large_objs_child_roi);
 end
 
 
