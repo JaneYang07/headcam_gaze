@@ -24,18 +24,21 @@ for i = 1 : length(sub_list)
 
     %%% find the dominant object in each frame, 0 if none
     threshold = 0.05;
-    largest_obj = []; second_largest_obj = [];
+    dominant_objs = large_objs; dominant_objs_size = large_size; second_largest_obj = []; data3 = [];
+
+
+    []
+
 
     for j = 1 : length(large_size)
 
-        if large_size(j) <= threshold
-            
+        if large_size(j) <= threshold || isnan(large_size(j))
+            dominant_objs(j) = 0;
         end
-        
     end
 
-
-
+    data3 = [tmp(:,1) dominant_objs];
+    record_additional_variable(sub_list(i),'cstream_vision_size_obj-largest-dominant_child', data3);
 
     %%% TODO: generate an aligned version of obj-largest and compare it
     %%% with original obj-largest in vis_streams
