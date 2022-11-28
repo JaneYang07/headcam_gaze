@@ -84,7 +84,3 @@ for i = 1 : length(sub_list)
 %     cevent_data1 = cstream2cevent(large_objs_child_roi);
 %     record_additional_variable(sub_list(i),'cevent_eye-vision_largest-roi_child', large_objs_child_roi);
 end
-
-function make_dominant_vision_obj_size
-    
-end
