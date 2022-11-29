@@ -25,6 +25,7 @@ for i = 1 : length(sub_list)
 
     child_inhand_num = size(find(inhand_child_left(:,2)+inhand_child_right(:,2)~=0),1);
     parent_inhand_num = size(find(inhand_parent_left(:,2)+inhand_parent_right(:,2)~=0),1);
+    not_inhand_num = size(find(inhand_child_left(:,2)+inhand_child_right(:,2)+inhand_parent_left(:,2)+inhand_parent_right(:,2)==0),1);
 
     result_matrix(i,1) = sub_list(i);
     % P(roi)
@@ -59,7 +60,7 @@ for i = 1 : length(sub_list)
     % find match pattern: dom&not inhand&roi
 
     % P(roi|dom&not inhand)
-    dom_not_inhand = sum(roi_dominant(:,2)~=0);
+%     dom_not_inhand = sum(roi_dominant(:,2)~=0);
     result_matrix(i,10) = 0;
 
 end
