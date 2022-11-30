@@ -4,7 +4,7 @@ obj_num = 24;
 
 sub_list = find_subjects({'cont_vision_size_obj9_child'},[exp_id]);
 
-colNames = {'subId','P(roi)','P(dom)','P(roi|dominant)','P(dom|roi)','P(dom|child inhand)','P(dom|parent inhand)','P(roi|dom&child inhand)','P(roi|dom&parent inhand)','P(roi|dom&not inhand)'};
+colNames = {'subId','P(roi)','P(dom)','P(roi|dominant)','P(dom|roi)','P(dom|child inhand)','P(dom|parent inhand)','P(roi|dom&child inhand)','P(roi|dom&parent inhand)','P(roi|dom&not inhand)','P(dom&not inhand)'};
 result_matrix = zeros(0,numel(colNames));
 
 for i = 1 : length(sub_list)
@@ -20,12 +20,7 @@ for i = 1 : length(sub_list)
     inhand_parent_right = get_variable_by_trial_cat(sub_list(i),'cstream_inhand_right-hand_obj-all_parent');
 
 
-
     rois{i} = align_streams(roi(:,1),{dominant,roi_dominant,child_hand_dom,parent_hand_dom,inhand_child_left,inhand_child_right,inhand_parent_left,inhand_parent_right});
-
-    child_inhand_num = size(find(inhand_child_left(:,2)+inhand_child_right(:,2)~=0),1);
-    parent_inhand_num = size(find(inhand_parent_left(:,2)+inhand_parent_right(:,2)~=0),1);
-    not_inhand_num = size(find(inhand_child_left(:,2)+inhand_child_right(:,2)+inhand_parent_left(:,2)+inhand_parent_right(:,2)==0),1);
 
     result_matrix(i,1) = sub_list(i);
     % P(roi)
@@ -37,8 +32,10 @@ for i = 1 : length(sub_list)
     % P(dom|roi)
     result_matrix(i,5) = sum(roi_dominant(:,2)~=0)/sum(roi(:,2)~=0);
     % P(dom|child inhand)
+    child_inhand_num = size(find(inhand_child_left(:,2)+inhand_child_right(:,2)~=0),1);
     result_matrix(i,6) = sum(child_hand_dom(:,2)~=0)/child_inhand_num;
     % P(dom|parent inhand)
+    parent_inhand_num = size(find(inhand_parent_left(:,2)+inhand_parent_right(:,2)~=0),1);
     result_matrix(i,7) = sum(parent_hand_dom(:,2)~=0)/parent_inhand_num;
     
     % find match pattern: dom&child inhand&roi
@@ -57,11 +54,27 @@ for i = 1 : length(sub_list)
     result_matrix(i,9) = sum(parent_inhand_dominant_roi(:,2)~=0)/sum(parent_hand_dom(:,2)~=0);
 
 
+    % P(roi|dom&not inhand)    
     % find match pattern: dom&not inhand&roi
+    % Step 1: find match condition: dom&not inhand
+    not_inhand_num = size(find(inhand_child_left(:,2)+inhand_child_right(:,2)+inhand_parent_left(:,2)+inhand_parent_right(:,2)==0),1);
+    not_inhand_index = find(inhand_child_left(:,2)+inhand_child_right(:,2)+inhand_parent_left(:,2)+inhand_parent_right(:,2)==0);
+    
+    match_index_dom_not_inhand = intersect(find(rois{i}(:,1)~=0),not_inhand_index);
+    dom_not_inhand = [roi(:,1) zeros(size(roi,1),1)];
+    dom_not_inhand(match_index_dom_not_inhand,2) = rois{i}(match_index_dom_not_inhand,1);
 
-    % P(roi|dom&not inhand)
-%     dom_not_inhand = sum(roi_dominant(:,2)~=0);
-    result_matrix(i,10) = 0;
+    % Step 2: find match condition: roi&dom&not inhand
+    match_index_roi_dom_not_inhand = intersect(find(abs(rois{i}(:,2)-dom_not_inhand(:,2))==0),find(rois{i}(:,2)~=0));
+    roi_dom_not_inhand = [roi(:,1) zeros(size(roi,1),1)];
+    roi_dom_not_inhand(match_index_roi_dom_not_inhand,2) = roi(match_index_roi_dom_not_inhand,2);
+
+    % Step 3: find P(roi|dom&not inhand) 
+    % = P(roi&dom&not inhand)/P(dom&inhand)
+    result_matrix(i,10) = sum(roi_dom_not_inhand(:,2)~=0)/sum(dom_not_inhand(:,2)~=0);
+
+    % P(dom&not inhand)
+    result_matrix(i,11) = sum(dom_not_inhand(:,2)~=0)/length(dom_not_inhand);
 
 end
 
