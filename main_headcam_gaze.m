@@ -58,7 +58,14 @@ for i = 1 : length(sub_list)
     % find match pattern: dom&not inhand&roi
     % Step 1: find match condition: dom&not inhand
     not_inhand_num = size(find(inhand_child_left(:,2)+inhand_child_right(:,2)+inhand_parent_left(:,2)+inhand_parent_right(:,2)==0),1);
-    not_inhand_index = find(inhand_child_left(:,2)+inhand_child_right(:,2)+inhand_parent_left(:,2)+inhand_parent_right(:,2)==0);
+%     not_inhand_index = find(inhand_child_left(:,2)+inhand_child_right(:,2)+inhand_parent_left(:,2)+inhand_parent_right(:,2)==0);
+    dom_not_inhand_child_left = find(abs(rois{i}(:,1)-rois{i}(:,5))~=0);
+    dom_not_inhand_child_right = find(abs(rois{i}(:,1)-rois{i}(:,6))~=0);
+    dom_not_inhand_parent_left = find(abs(rois{i}(:,1)-rois{i}(:,7))~=0);
+    dom_not_inhand_parent_right = find(abs(rois{i}(:,1)-rois{i}(:,8))~=0);
+    dom_not_inhand_child = intersect(dom_not_inhand_child_left,dom_not_inhand_child_right);
+    dom_not_inhand_parent = intersect(dom_not_inhand_parent_left,dom_not_inhand_parent_right);
+    not_inhand_index = intersect(dom_not_inhand_child,dom_not_inhand_parent);
     
     match_index_dom_not_inhand = intersect(find(rois{i}(:,1)~=0),not_inhand_index);
     dom_not_inhand = [roi(:,1) zeros(size(roi,1),1)];
