@@ -79,3 +79,4 @@ for i = 1 : length(sub_list)
 end
 
 result_table = array2table(result_matrix,'VariableNames',colNames);
+writetable(result_table,'result_table.csv');
