@@ -1,5 +1,5 @@
 clear;
-exp_id = [12,15];
+exp_id = [12];
 obj_num = 24; % 24 objs for exp 12, 10 objs for exp 15
 
 sub_list = find_subjects({'cont_vision_size_obj9_child'},exp_id);
