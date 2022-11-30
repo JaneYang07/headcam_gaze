@@ -1,15 +1,14 @@
 clear;
-exp_id = 12;
-obj_num = 24;
+exp_id = 15;
+obj_num = 10;
 
 sub_list = find_subjects({'cont_vision_size_obj9_child'},[exp_id]);
-%sub_list = [1201 1202];
 
 for i = 1 : length(sub_list)
-%     for obj_id = 1 : obj_num
-%         tmp = get_variable(sub_list(i),sprintf('cont_vision_size_obj%d_child',obj_id));
-%         obj_size{i}(:,obj_id) = tmp(:,2);
-%     end
+    for obj_id = 1 : obj_num
+        tmp = get_variable(sub_list(i),sprintf('cont_vision_size_obj%d_child',obj_id));
+        obj_size{i}(:,obj_id) = tmp(:,2);
+    end
 
     % find the largest object in each frame
     % save it as a cstream variable
@@ -23,26 +22,26 @@ for i = 1 : length(sub_list)
 %     record_additional_variable(sub_list(i),'cont_vision_size_obj-largest-size_child', data2);
 
     %%% find the dominant object in each frame, 0 if none
-%     abs_threshold = 0.05; relative_threshold = 0.025;
-%     largest_objs = []; largest_objs_size = []; second_largest_objs = []; second_largest_objs_size = [];
-%     sorted_objs = []; sorted_size = [];
-%     [sorted_size, sorted_objs] = sort(obj_size{i},2,'descend','MissingPlacement','last');
-% 
-%     largest_objs = sorted_objs(:,1);
-%     largest_objs_size = sorted_size(:,1);
-%     second_largest_objs = sorted_objs(:,2);
-%     second_largest_objs_size = sorted_size(:,2);
-%     dominant_objs = largest_objs; dominant_objs_size = largest_objs_size;
-%     data3 = [];
-% 
-%     for j = 1 : length(largest_objs_size)
-%         if largest_objs_size(j) <= abs_threshold || isnan(largest_objs_size(j)) || largest_objs_size(j)-second_largest_objs_size(j) < relative_threshold
-%             dominant_objs(j) = 0;
-%         end
-%     end
-% 
-%     data3 = [tmp(:,1) dominant_objs];
-%     record_additional_variable(sub_list(i),'cstream_vision_size_obj-largest-dominant_child', data3);
+    abs_threshold = 0.05; relative_threshold = 0.025;
+    largest_objs = []; largest_objs_size = []; second_largest_objs = []; second_largest_objs_size = [];
+    sorted_objs = []; sorted_size = [];
+    [sorted_size, sorted_objs] = sort(obj_size{i},2,'descend','MissingPlacement','last');
+
+    largest_objs = sorted_objs(:,1);
+    largest_objs_size = sorted_size(:,1);
+    second_largest_objs = sorted_objs(:,2);
+    second_largest_objs_size = sorted_size(:,2);
+    dominant_objs = largest_objs; dominant_objs_size = largest_objs_size;
+    data3 = [];
+
+    for j = 1 : length(largest_objs_size)
+        if largest_objs_size(j) <= abs_threshold || isnan(largest_objs_size(j)) || largest_objs_size(j)-second_largest_objs_size(j) < relative_threshold
+            dominant_objs(j) = 0;
+        end
+    end
+
+    data3 = [tmp(:,1) dominant_objs];
+    record_additional_variable(sub_list(i),'cstream_vision_size_obj-largest-dominant_child', data3);
 
     %%% TODO: generate an aligned version of obj-largest and compare it
     %%% with original obj-largest in vis_streams
