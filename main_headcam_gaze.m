@@ -1,8 +1,8 @@
 clear;
-exp_id = 12;
-obj_num = 24;
+exp_id = [12,15];
+obj_num = 24; % 24 objs for exp 12, 10 objs for exp 15
 
-sub_list = find_subjects({'cont_vision_size_obj9_child'},[exp_id]);
+sub_list = find_subjects({'cont_vision_size_obj9_child'},exp_id);
 
 colNames = {'subId','P(roi)','P(dom)','P(roi|dominant)','P(dom|roi)','P(dom|child inhand)','P(dom|parent inhand)','P(roi|dom&child inhand)','P(roi|dom&parent inhand)','P(roi|dom&not inhand)','P(dom&not inhand)'};
 result_matrix = zeros(0,numel(colNames));
