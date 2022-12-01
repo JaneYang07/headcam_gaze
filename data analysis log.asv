@@ -9,4 +9,4 @@
 9.  P(dom): prop of time/frames with a dom object in view
 10. P(dom+child inhand|roi)
 11. P(dom+parent inhand|roi)
-12. P(dom&not inhand|roi)
+12. 
