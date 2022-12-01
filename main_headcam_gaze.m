@@ -195,7 +195,7 @@ for i = 1 : length(sub_list)
 
 
     % P(largest&child inhand|roi)
-    result_matrix(i,12) = sum(child_inhand_largest_roi(:,2)~=0)/sum(roi(:,2)~a=0);
+    result_matrix(i,12) = sum(child_inhand_largest_roi(:,2)~=0)/sum(roi(:,2)~=0);
 
     % P(largest&parent inhand|roi)
     result_matrix(i,13) = sum(parent_inhand_largest_roi(:,2)~=0)/sum(roi(:,2)~=0);
