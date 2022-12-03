@@ -21,7 +21,7 @@ switch option
         min_duration = 1;
         variable_name = 'cevent_vision_size_obj-largest-dominant_child';
         
-        output_name = 'cevent_vision_size_obj-largest-dominant-sustaine_1s_child';
+        output_name = 'cevent_vision_size_obj-largest-dominant-sustained_1s_child';
         record_cstream = 1;
         
 end
