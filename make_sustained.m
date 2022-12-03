@@ -19,9 +19,9 @@ switch option
         min_max_gap = 0.5;
         max_max_gap = 1;
         min_duration = 1;
-        variable_name = 'cevent_vision_size_obj-largest-dominant_child';
+        variable_name = 'cevent_vision_dominant-obj_child';
         
-        output_name = 'cevent_vision_size_obj-largest-dominant-sustained_1s_child';
+        output_name = 'cevent_vision_size_dominant-obj-sustained-1s_child';
         record_cstream = 1;
         
 end
