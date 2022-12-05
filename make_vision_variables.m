@@ -15,11 +15,11 @@ for i = 1 : length(sub_list)
     large_size = []; large_objs = []; data1 = []; data2 = [];
     [large_size, large_objs] = max(obj_size{i},[],2);
     data1 = [tmp(:,1) large_objs];
-    record_additional_variable(sub_list(i),'cstream_vision_largest-obj_child', data1);
+%     record_additional_variable(sub_list(i),'cstream_vision_largest-obj_child', data1);
     cevent_data1 = cstream2cevent(data1);
-    record_additional_variable(sub_list(i),'cevent_vision_largest-obj_child', cevent_data1);
+%     record_additional_variable(sub_list(i),'cevent_vision_largest-obj_child', cevent_data1);
     data2 = [tmp(:,1) large_size];
-    record_additional_variable(sub_list(i),'cont_vision_largest-size_child', data2);
+%     record_additional_variable(sub_list(i),'cont_vision_largest-size_child', data2);
 
     %%% find the dominant object in each frame, 0 if none
     abs_threshold = 0.05; relative_threshold = 0.025;
@@ -41,9 +41,9 @@ for i = 1 : length(sub_list)
     end
 
     data3 = [tmp(:,1) dominant_objs];
-    record_additional_variable(sub_list(i),'cstream_vision_dominant-obj_child', data3);
+%     record_additional_variable(sub_list(i),'cstream_vision_dominant-obj_child', data3);
     cevent_data3 = cstream2cevent(data3);
-    record_additional_variable(sub_list(i),'cevent_vision_dominant-obj_child', cevent_data3);
+%     record_additional_variable(sub_list(i),'cevent_vision_dominant-obj_child', cevent_data3);
 
 
     %%% MAKE SECONDARY DOMINANT VARIABLES
@@ -73,20 +73,20 @@ for i = 1 : length(sub_list)
     dominant_objs_child_inhand(match_index_child_inhand,2) = rois{i}(match_index_child_inhand,1);
     dominant_objs_parent_inhand(match_index_parent_inhand,2) = rois{i}(match_index_parent_inhand,1);
     
-    record_additional_variable(sub_list(i),'cstream_vision_dominant-inhand_child-child', dominant_objs_child_inhand);
-    record_additional_variable(sub_list(i),'cstream_vision_dominant-inhand_child-parent', dominant_objs_parent_inhand);
+%     record_additional_variable(sub_list(i),'cstream_vision_dominant-inhand_child-child', dominant_objs_child_inhand);
+%     record_additional_variable(sub_list(i),'cstream_vision_dominant-inhand_child-parent', dominant_objs_parent_inhand);
 
     % find matched condition: roi & dominant obj
     match_index_child_roi = find(abs(roi(:,2)-rois{i}(:,1))==0);
     dominant_objs_child_roi = [roi(:,1) zeros(size(roi,1),1)];
     dominant_objs_child_roi(match_index_child_roi,2) = rois{i}(match_index_child_roi,1);
 
-    record_additional_variable(sub_list(i),'cstream_eye-vision_roi-dominant_child', dominant_objs_child_roi);
+%     record_additional_variable(sub_list(i),'cstream_eye-vision_roi-dominant_child', dominant_objs_child_roi);
     cevent_data1 = cstream2cevent(dominant_objs_child_roi);
-    record_additional_variable(sub_list(i),'cevent_eye-vision_roi-dominant_child', dominant_objs_child_roi);
+%     record_additional_variable(sub_list(i),'cevent_eye-vision_roi-dominant_child', dominant_objs_child_roi);
 
     % make cevent/cstream_vision_size_obj-largest-dominant-sustained_1s_child variables
-    make_sustained(sub_list(i), 1);
+%     make_sustained(sub_list(i), 1);
 
 
 
@@ -121,15 +121,15 @@ for i = 1 : length(sub_list)
     largest_objs_child_inhand(match_index_child_inhand,2) = rois{i}(match_index_child_inhand,1);
     largest_objs_parent_inhand(match_index_parent_inhand,2) = rois{i}(match_index_parent_inhand,1);
     
-    record_additional_variable(sub_list(i),'cstream_vision_largest-inhand_child-child', largest_objs_child_inhand);
-    record_additional_variable(sub_list(i),'cstream_vision_largest-inhand_child-parent', largest_objs_parent_inhand);
+%     record_additional_variable(sub_list(i),'cstream_vision_largest-inhand_child-child', largest_objs_child_inhand);
+%     record_additional_variable(sub_list(i),'cstream_vision_largest-inhand_child-parent', largest_objs_parent_inhand);
 
     % find matched condition: roi & dominant obj
     match_index_child_roi = find(abs(roi(:,2)-rois{i}(:,1))==0);
     largest_objs_child_roi = [roi(:,1) zeros(size(roi,1),1)];
     largest_objs_child_roi(match_index_child_roi,2) = rois{i}(match_index_child_roi,1);
 
-    record_additional_variable(sub_list(i),'cstream_eye-vision_roi-largest_child', largest_objs_child_roi);
+%     record_additional_variable(sub_list(i),'cstream_eye-vision_roi-largest_child', largest_objs_child_roi);
     cevent_data1 = cstream2cevent(dominant_objs_child_roi);
-    record_additional_variable(sub_list(i),'cevent_eye-vision_roi-largest_child', largest_objs_child_roi);
+%     record_additional_variable(sub_list(i),'cevent_eye-vision_roi-largest_child', largest_objs_child_roi);
 end

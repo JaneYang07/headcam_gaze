@@ -1,4 +1,4 @@
-subId,P(roi),P(dom),P(roi|dominant),P(dom|roi),P(dom|child inhand),P(dom|parent inhand),P(roi|dom&child inhand),P(roi|dom&parent inhand),P(roi|dom&not inhand),P(dom&not inhand),P(dom&child inhand|roi),P(dom&parent inhand|roi),P(dom&not inhand|roi),P(dom&both inhand|roi),,,,,
+subId,P(roi),P(dom),P(roi|dominant),P(dom|roi),P(dom|child inhand),P(dom|parent inhand),P(roi|dom&child inhand),P(roi|dom&parent inhand),P(roi|dom&not inhand),P(dom&not inhand),P(dom&child inhand|roi),P(dom&parent inhand|roi),P(dom&not inhand|roi),P(dom&both inhand|roi),,,,,P(dom|roi)
 1201,0.758469725,0.482589075,0.601116539,0.382470473,0.382807469,0.224005808,0.855060275,0.764494058,0.09980139,0.1356503,0.270846284,0.188526774,0.017849214,0.094751798,,,0.382470473,,0.382470473
 1202,0.726304903,0.661455165,0.440540789,0.401206131,0.498929336,0.21398875,0.588278822,0.613714286,0.14835628,0.216510524,0.332942457,0.044978641,0.044224809,0.020939777,,,0.401206131,,0.401206131
 1203,0.712753477,0.402006986,0.492759619,0.280037621,0.181175238,0.266954616,0.739759036,0.598889157,0.04916986,0.087481146,0.120307234,0.1943726,0.006034956,0.040677169,,,0.280037621,,0.280037621
