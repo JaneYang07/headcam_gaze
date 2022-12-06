@@ -235,7 +235,7 @@ obj_num = 24; % 24 objs for exp 12, 10 objs for exp 15
 
 sub_list = find_subjects({'cont_vision_size_obj9_child'},exp_id);
 
-colNames = {'subId','num_frame','num_roi','num_dom','num_dom&roi','num_dom&not roi','num_roi&not dom','num_not roi&not dom'};
+colNames = {'subId','num_frame','num_roi','num_dom','num_match','num_mismatch','num_not_roi_or_not_dom'};
 result_matrix = zeros(0,numel(colNames));
 
 for i = 1 : length(sub_list)
@@ -255,22 +255,26 @@ for i = 1 : length(sub_list)
 
     result_matrix(i,1) = sub_list(i);
     % num_frame
-    result_matrix(i,2) = length(roi);
+    num_frame = length(roi);
+    result_matrix(i,2) = num_frame;
     % num_roi
-    result_matrix(i,3) = sum(roi(:,2)~=0 & ~isnan(roi(:,2)));
+    num_roi = sum(roi(:,2)~=0 & ~isnan(roi(:,2)));
+    result_matrix(i,3) = num_roi;
     % num_dom
-    result_matrix(i,4) = sum(rois{i}(:,1)~=0 & ~isnan(rois{i}(:,1)));
-    % num_dom&roi
-    result_matrix(i,5) = sum(rois{i}(:,2)~=0 & ~isnan(rois{i}(:,2)));
-    % num_dom&not roi
-    num_dom_not_roi = size(find(abs(roi(:,2)-rois{i}(:,1))~=0 & rois{i}(:,1)~=0 & ~isnan(rois{i}(:,1))),1);
-    result_matrix(i,6) = num_dom_not_roi;
-    % num_roi&not dom
-    num_roi_not_dom = size(find(abs(roi(:,2)-rois{i}(:,1))~=0 & roi(:,2)~=0 & ~isnan(roi(:,2))),1);
-    result_matrix(i,7) = num_roi_not_dom;
+    num_dom = sum(rois{i}(:,1)~=0 & ~isnan(rois{i}(:,1)));
+    result_matrix(i,4) = num_dom;
+    % num_dom&roi (match)
+    num_match = sum(rois{i}(:,2)~=0 & ~isnan(rois{i}(:,2)));
+    result_matrix(i,5) = num_match;
+    % num_dom&not roi | num_roi&not dom (mismatch)
+    num_mismatch = size(find(abs(roi(:,2)-rois{i}(:,1))~=0 & roi(:,2)~=0 & ~isnan(roi(:,2)) & rois{i}(:,1)~=0 & ~isnan(rois{i}(:,1))),1);
+    result_matrix(i,6) = num_mismatch;
 
-    % num_not roi&not dom
-    result_matrix(i,8) = length(roi)-result_matrix(i,5);
+    % num_not roi_or_not_dom
+    not_dom = find(rois{i}(:,1)==0 | isnan(rois{i}(:,1)));
+    not_roi = find(roi(:,2)==0 | isnan(roi(:,2)));
+    num_not_roi_not_dom = size(union(not_dom,not_roi),1);
+    result_matrix(i,7) = num_not_roi_not_dom;
 end
 
 result_table = array2table(result_matrix,'VariableNames',colNames);
