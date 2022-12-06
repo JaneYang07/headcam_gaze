@@ -27,6 +27,8 @@ for i = 1 : length(sub_list)
     sorted_objs = []; sorted_size = [];
     [sorted_size, sorted_objs] = sort(obj_size{i},2,'descend','MissingPlacement','last');
 
+
+
     largest_objs = sorted_objs(:,1);
     largest_objs_size = sorted_size(:,1);
     second_largest_objs = sorted_objs(:,2);
@@ -88,6 +90,32 @@ for i = 1 : length(sub_list)
     % make cevent/cstream_vision_size_obj-largest-dominant-sustained_1s_child variables
 %     make_sustained(sub_list(i), 1);
 
+    % make cevent/cstream_eye-vision_roi-size-rank_child variables
+    roi_size_rank = [roi(:,1) zeros(size(roi,1),1)];
+    
+    tmp = get_variable(sub_list(i),sprintf('cont_vision_size_obj9_child'));
+    sorted_objs_with_time = [tmp(:,1) sorted_objs];
+    aligned_sorted_objs = [roi(:,1) align_streams(roi(:,1),{sorted_objs_with_time})];
+
+    match_time = (roi(:,1) == aligned_sorted_objs(:,1));
+    if roi(match_time,2) ~=0
+        match_obj_ind = find(aligned_sorted_objs(match_time,2)==roi(match_time,2));
+        roi_size_rank(match_time,2) = aligned_sorted_objs(match_time,match_obj_ind);
+    end
+
+
+%     for frame_ind = 1 : length(sorted_size)
+%         sorted_objs(frame_ind,isnan(sorted_size(frame_ind,:)))=0;
+% 
+%         disp(sub_list(i));
+% 
+%         if roi(frame_ind,2) ~=0
+%             match_ind = (sorted_objs(frame_ind,:)==roi(frame_ind,2)) ~= 0;
+%             if match_ind
+%                 roi_size_rank(frame_ind,2) = sorted_objs(frame_ind, match_ind);
+%             end
+%         end
+%     end
 
 
 
