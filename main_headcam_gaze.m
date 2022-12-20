@@ -235,7 +235,7 @@ obj_num = 24; % 24 objs for exp 12, 10 objs for exp 15
 
 sub_list = find_subjects({'cont_vision_size_obj9_child'},exp_id);
 
-colNames = {'subId','num_frame','num_roi','num_dom','num_match','num_mismatch','num_not_roi_or_not_dom'};
+colNames = {'subId','num_frame','num_roi','num_dom','num_overlap_match','num_overlap_mismatch','num_roi_not_dom', 'num_dom_not_roi','num_not_roi_and_not_dom'};
 result_matrix = zeros(0,numel(colNames));
 
 for i = 1 : length(sub_list)
@@ -263,18 +263,24 @@ for i = 1 : length(sub_list)
     % num_dom
     num_dom = sum(rois{i}(:,1)~=0 & ~isnan(rois{i}(:,1)));
     result_matrix(i,4) = num_dom;
-    % num_dom&roi (match)
+    % num_overlap_match
     num_match = sum(rois{i}(:,2)~=0 & ~isnan(rois{i}(:,2)));
     result_matrix(i,5) = num_match;
-    % num_dom&not roi | num_roi&not dom (mismatch)
+    % num_overlap_mismatch
     num_mismatch = size(find(abs(roi(:,2)-rois{i}(:,1))~=0 & roi(:,2)~=0 & ~isnan(roi(:,2)) & rois{i}(:,1)~=0 & ~isnan(rois{i}(:,1))),1);
     result_matrix(i,6) = num_mismatch;
 
-    % num_not roi_or_not_dom
-    not_dom = find(rois{i}(:,1)==0 | isnan(rois{i}(:,1)));
-    not_roi = find(roi(:,2)==0 | isnan(roi(:,2)));
-    num_not_roi_not_dom = size(union(not_dom,not_roi),1);
-    result_matrix(i,7) = num_not_roi_not_dom;
+    % num_roi_not_dom
+    num_roi_not_dom = size(find((roi(:,2)~=0 & ~isnan(roi(:,2))) & (roi(:,2)-rois{i}(:,1)==roi(:,2) | isnan(abs(roi(:,2)-rois{i}(:,1))))),1);
+    result_matrix(i,7) = num_roi_not_dom;
+
+    % num_dom_not_roi
+    num_dom_not_roi = size(find((rois{i}(:,1)~=0 & ~isnan(rois{i}(:,1))) & (rois{i}(:,1)-roi(:,2)==rois{i}(:,1) | isnan(abs(rois{i}(:,1)-roi(:,2))))),1);
+    result_matrix(i,8) = num_dom_not_roi;
+
+    % num_not_roi_and_not_dom
+    num_not_roi_and_not_dom = size(find((abs(roi(:,2)-rois{i}(:,1))==0 | isnan(abs(roi(:,2)-rois{i}(:,1)))) & (roi(:,2)==0 | isnan(roi(:,2))) & (rois{i}(:,1)==0 | isnan(rois{i}(:,1)))),1);
+    result_matrix(i,9) = num_not_roi_and_not_dom;
 end
 
 result_table = array2table(result_matrix,'VariableNames',colNames);
