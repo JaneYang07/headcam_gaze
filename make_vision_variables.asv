@@ -4,8 +4,7 @@ obj_num = 24;
 
 sub_list = find_subjects({'cont_vision_size_obj9_child'},[exp_id]);
 
-for i = 3
-% for i = 1 : length(sub_list)
+for i = 1 : length(sub_list)
     for obj_id = 1 : obj_num
         tmp = get_variable(sub_list(i),sprintf('cont_vision_size_obj%d_child',obj_id));
         obj_size{i}(:,obj_id) = tmp(:,2);
@@ -49,7 +48,7 @@ for i = 3
 %     record_additional_variable(sub_list(i),'cevent_vision_dominant-obj_child', cevent_data3);
 
 
-    %%% MAKE SECONDARY DOMINANT VARIABLES
+    %%% MAKE DOMINANT VARIABLES
 
     % find the instances where the dominant object is also in hand of
     % child/parent
@@ -86,17 +85,44 @@ for i = 3
 
 %     record_additional_variable(sub_list(i),'cstream_eye-vision_roi-dominant_child', dominant_objs_child_roi);
     cevent_data1 = cstream2cevent(dominant_objs_child_roi);
-%     record_additional_variable(sub_list(i),'cevent_eye-vision_roi-dominant_child', dominant_objs_child_roi);
+%     record_additional_variable(sub_list(i),'cevent_eye-vision_roi-dominant_child', cevent_data1);
 
     % make cevent/cstream_vision_size_obj-largest-dominant-sustained_1s_child variables
 %     make_sustained(sub_list(i), 1);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     % make cevent/cstream_eye-vision_roi-size-rank_child variables
     roi_size_rank = [roi(:,1) zeros(size(roi,1),1)];
 
 
-    roi(:,1) = round(roi(:,1),4);
-    roi(:,1) = round(roi(:,1),4);
+
 
     for frame_ind = 1 : length(sorted_size)
         sorted_objs(frame_ind,isnan(sorted_size(frame_ind,:)))=0;
@@ -104,38 +130,18 @@ for i = 3
 
     tmp = get_variable(sub_list(i),sprintf('cont_vision_size_obj9_child'));
     sorted_objs_with_time = [tmp(:,1) sorted_objs];
-
-
-
-%     temp{i} = align_streams(roi(:,1),{sorted_objs_with_time(:,1:2)});
-%     aligned_sorted_objs = [roi(:,1) align_streams(roi(:,1),{sorted_objs_with_time})];
-% 
-%     match_time = (roi(:,1) == aligned_sorted_objs(:,1));
-%     if roi(match_time,2) ~=0
-%         match_obj_ind = find(aligned_sorted_objs(match_time,2)==roi(match_time,2));
-%         roi_size_rank(match_time,2) = aligned_sorted_objs(match_time,match_obj_ind);
-%     end
-
-
-%     for frame_ind = 1 : length(sorted_size)
-%         sorted_objs(frame_ind,isnan(sorted_size(frame_ind,:)))=0;
-% 
-%         disp(sub_list(i));
-% 
-%         if roi(frame_ind,2) ~=0
-%             match_ind = (sorted_objs(frame_ind,:)==roi(frame_ind,2)) ~= 0;
-%             if match_ind
-%                 roi_size_rank(frame_ind,2) = sorted_objs(frame_ind, match_ind);
-%             end
-%         end
-%     end
+    roi(:,1) = round(roi(:,1),4);
+    sorted_objs_with_time(:,1) = round(sorted_objs_with_time(:,1),4);
+    [~,ii] = ismember(roi(:,1),sorted_objs_with_time(:,1));
+    disp(ii);
 
 
 
 
 
 
-    %%% MAKE SECONDARY LARGEST VARIABLES
+
+    %%% MAKE LARGEST VARIABLES
 
     % find the instances where the dominant object is also in hand of
     % child/parent

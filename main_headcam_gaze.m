@@ -225,10 +225,6 @@
 % 
 
 
-
-
-%%% Latest version of analysis
-
 clear;
 exp_id = [12];
 obj_num = 24; % 24 objs for exp 12, 10 objs for exp 15
@@ -285,6 +281,3 @@ end
 
 result_table = array2table(result_matrix,'VariableNames',colNames);
 writetable(result_table,'result_table_new.csv');
-
-
-

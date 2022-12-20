@@ -39,10 +39,10 @@ for i = 1 : length(sub_list)
     num_dom = sum(rois{i}(:,1)~=0 & ~isnan(rois{i}(:,1)));
     result_matrix(i,3) = num_dom;
     % child_inhand
-    num_child_inhand = sum((rois{i}(:,5)~=0 & ~isnan(rois{i}(:,5))) & (rois{i}(:,6)~=0 & ~isnan(rois{i}(:,6))));
+    num_child_inhand = sum((rois{i}(:,5)~=0 & ~isnan(rois{i}(:,5))) | (rois{i}(:,6)~=0 & ~isnan(rois{i}(:,6))));
     result_matrix(i,4) = num_child_inhand;
     % parent_inhand
-    num_parent_inhand = sum((rois{i}(:,7)~=0 & ~isnan(rois{i}(:,7))) & (rois{i}(:,8)~=0 & ~isnan(rois{i}(:,8))));
+    num_parent_inhand = sum((rois{i}(:,7)~=0 & ~isnan(rois{i}(:,7))) | (rois{i}(:,8)~=0 & ~isnan(rois{i}(:,8))));
     result_matrix(i,5) = num_parent_inhand;
     % roi&dom
     num_roi_dom = sum(rois{i}(:,2)~=0 & ~isnan(rois{i}(:,2)));
