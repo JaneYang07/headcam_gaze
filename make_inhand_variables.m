@@ -100,7 +100,7 @@ for i = 1 : length(sub_list)
     for ind = 1:length(mismatch_index_child_inhand_dom)
 %         disp(ind_child);
 %         disp(rois{i}(ind_child,2)~=0);
-        if (rois{i}(mismatch_index_child_inhand_dom(ind),2)~=0)
+        if (rois{i}(mismatch_index_child_inhand_dom(ind),2)~=0 && rois{i}(mismatch_index_child_inhand_dom(ind),2)~=rois{i}(mismatch_index_child_inhand_dom(ind),1))
             mismatch_child_inhand_dom_inhand(mismatch_index_child_inhand_dom(ind),2) = rois{i}(mismatch_index_child_inhand_dom(ind),2);
         else
 %             fprintf('here%d\n',ind_child);
@@ -129,7 +129,7 @@ for i = 1 : length(sub_list)
     mismatch_parent_inhand_dom_inhand = [roi(:,1) zeros(size(roi,1),1)];
 
     for ind = 1:length(mismatch_index_parent_inhand_dom)
-        if (rois{i}(mismatch_index_parent_inhand_dom(ind),4)~=0)
+        if (rois{i}(mismatch_index_parent_inhand_dom(ind),4)~=0 && rois{i}(mismatch_index_parent_inhand_dom(ind),4)~=rois{i}(mismatch_index_parent_inhand_dom(ind),1))
             mismatch_parent_inhand_dom_inhand(mismatch_index_parent_inhand_dom(ind),2) = rois{i}(mismatch_index_parent_inhand_dom(ind),4);
         else
             mismatch_parent_inhand_dom_inhand(mismatch_index_parent_inhand_dom(ind),2) = rois{i}(mismatch_index_parent_inhand_dom(ind),5);
@@ -150,7 +150,7 @@ for i = 1 : length(sub_list)
     
 
 
-%     disp(sum(rois{i}(:,1)~=0));
-%     disp(sum(cstream_dom_child_holding_only(:,2)~=0) + sum(cstream_dom_parent_holding_only(:,2)~=0) + sum(cstream_dom_joint_holding(:,2)~=0) + sum(cstream_dom_not_holding(:,2)~=0));
+    disp(sum(rois{i}(:,1)~=0));
+    disp(sum(cstream_dom_child_holding_only(:,2)~=0) + sum(cstream_dom_parent_holding_only(:,2)~=0) + sum(cstream_dom_joint_holding(:,2)~=0) + sum(cstream_dom_not_holding(:,2)~=0));
 
 end

@@ -2,8 +2,8 @@
 
 clear;
 
-exp_id = [12];
-obj_num = 24; % 24 objs for exp 12, 10 objs for exp 15
+exp_id = [15];
+obj_num = 10; % 24 objs for exp 12, 10 objs for exp 15
 
 sub_list = find_subjects({'cont_vision_size_obj9_child'},exp_id);
 
@@ -30,6 +30,15 @@ for i = 1 : length(sub_list)
     roi = get_variable_by_trial_cat(sub_list(i),'cstream_eye_roi_child');
     dominant = get_variable_by_trial_cat(sub_list(i),'cstream_vision_dominant-obj_child');
     roi_dominant = get_variable_by_trial_cat(sub_list(i),'cstream_eye-vision_roi-dominant_child');
+
+
+    roi(:,1) = round(roi(:,1),4);
+    dominant(:,1) = round(dominant(:,1),4);
+    roi_dominant(:,1) = round(roi_dominant(:,1),4);
+
+    roi(isnan(roi(:,2)),2) = 0;
+    dominant(isnan(dominant(:,2)),2) = 0;
+    roi_dominant(isnan(roi_dominant(:,2)),2) = 0;
 
 
     rois{i} = align_streams(roi(:,1),{dominant,roi_dominant});
@@ -112,18 +121,18 @@ for i = 1 : length(sub_list)
 %     delete_variables('cstream_eye-vision_roi-no-dom-obj_child');
     record_additional_variable(sub_list(i),'cstream_eye-vision_roi-no-dom-obj_child',nonoverlap_roi_matrix{i});
     record_additional_variable(sub_list(i),'cevent_eye-vision_roi-no-dom-obj_child',cevent_roi_no_dom);
-%     record_additional_variable(sub_list(i),'cstream_eye-vision_roi-dom-match-state_child',cstream_state);
-%     record_additional_variable(sub_list(i),'cevent_eye-vision_roi-dom-match-state_child',cevent_state);
+    record_additional_variable(sub_list(i),'cstream_eye-vision_roi-dom-match-state_child',cstream_state);
+    record_additional_variable(sub_list(i),'cevent_eye-vision_roi-dom-match-state_child',cevent_state);
     cevent_match_roi_dom = cstream2cevent(match_matrix{i});
     cevent_mismatch_roi = cstream2cevent(mismatch_roi_matrix{i});
     cevent_mismatch_dom = cstream2cevent(mismatch_dom_matrix{i});
-%     record_additional_variable(sub_list(i),'cevent_eye-vision_roi-dom-match-obj_child',cevent_match_roi_dom);
-%     record_additional_variable(sub_list(i),'cevent_eye-vision_roi-mismatch-dom-obj_child',cevent_mismatch_roi);
-%     record_additional_variable(sub_list(i),'cevent_eye-vision_dom-mismatch-roi-obj_child',cevent_mismatch_dom);
+    record_additional_variable(sub_list(i),'cevent_eye-vision_roi-dom-match-obj_child',cevent_match_roi_dom);
+    record_additional_variable(sub_list(i),'cevent_eye-vision_roi-mismatch-dom-obj_child',cevent_mismatch_roi);
+    record_additional_variable(sub_list(i),'cevent_eye-vision_dom-mismatch-roi-obj_child',cevent_mismatch_dom);
 end
 
 result_table = array2table(result_matrix,'VariableNames',colNames);
-writetable(result_table,'result_table_new.csv');
+writetable(result_table,'result_table_exp15.csv');
 
 
 

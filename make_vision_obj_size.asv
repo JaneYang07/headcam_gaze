@@ -1,0 +1,20 @@
+clear;
+exp_id = 12;
+obj_num = 24;
+
+% load data 
+sub_list = find_subjects({'cont_vision_size_obj1_child'},[12]); 
+sub_list = [ 1201 1202];
+for i = 1 : length(sub_list)
+   for obj_id = 1: obj_num
+       tmp= get_variable(sub_list(i),sprintf('cont_vision_size_obj%d_child',obj_id)); 
+       obj_size{i}(:,obj_id) = tmp(:,2); 
+   end
+    % find the largest object in each frame 
+    % save it as a cstream variable 
+    large_size=[]; large_objs=[];
+    [large_size large_objs] = max(obj_size{i},[],2); 
+    data = [tmp(:,1) large_
+    record_variable(sub_list(i),'cevent_eye_joint-attend_child-lead_both', data);
+
+end
