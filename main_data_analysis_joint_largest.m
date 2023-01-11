@@ -1,7 +1,11 @@
 clear;
 
+exp_id = 12;
+sub_list = find_subjects({'cont_vision_size_obj9_parent'},[exp_id]);
+sub_list = setdiff(sub_list,1229);
+
 %raw_data = csvread('child_dom_by_roi_target_exp12.csv', 4); 
-raw_data = csvread('joint_largest_by_roi_target_exp12.csv', 4); 
+raw_data = csvread('joint_largest_by_roi_target_exp12_v2.csv', 4); 
 
 child_roi_col = 40; % joint attend column  
 parent_roi_col = 14;
@@ -107,6 +111,17 @@ ylabel('Proportion')
 
 legend_labels = {'dominant object','not dominant object'};
 legend(legend_labels);
+
+
+
+for i = 1:numel(sub_list)
+
+end
+
+
+B=A(cellfun(@(x) isequal(1,x),{A{:,2}}),:)
+C=A(cellfun(@(x) isequal(2,x),{A{:,2}}),:)
+
 
 
 %% CONDITION ON CHILD HOLD vs. PARENT HOLD
