@@ -3,8 +3,12 @@ exp_id = 12;
 sub_list = find_subjects({'cont_vision_size_obj9_parent'},[exp_id]);
 sub_list = setdiff(sub_list,[1207,1229]);
 
+exp_id = 12;
+sub_list = find_subjects({'cont_vision_size_obj9_parent'},[exp_id]);
+sub_list = setdiff(sub_list,1229);
+
 %raw_data = csvread('child_dom_by_roi_target_exp12.csv', 4); 
-raw_data = csvread('joint_largest_by_roi_target_exp12.csv', 4); 
+raw_data = csvread('joint_largest_by_roi_target_exp12_v2.csv', 4); 
 
 child_roi_col = 8;
 % child_roi_col = 40; % joint attend column  
@@ -152,6 +156,17 @@ scatter(repmat(xtips2(2), size(sub_mean_prop,1), 1),sub_mean_prop(:,5),60,'Marke
 scatter(repmat(xtips1(1), size(sub_mean_prop,1), 1),sub_mean_prop(:,3),60,'MarkerFaceColor','r','MarkerEdgeColor','k','LineWidth',1)
 scatter(repmat(xtips2(2), size(sub_mean_prop,1), 1),sub_mean_prop(:,6),60,'MarkerFaceColor','y','MarkerEdgeColor','k','LineWidth',1)
 % hold off
+
+
+for i = 1:numel(sub_list)
+
+end
+
+
+B=A(cellfun(@(x) isequal(1,x),{A{:,2}}),:)
+C=A(cellfun(@(x) isequal(2,x),{A{:,2}}),:)
+
+
 
 %% CONDITION ON CHILD HOLD vs. PARENT HOLD
 inhand_time = 0.5; 
