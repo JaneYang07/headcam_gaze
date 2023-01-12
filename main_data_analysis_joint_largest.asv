@@ -1,9 +1,13 @@
 clear;
+exp_id = 12;
+sub_list = find_subjects({'cont_vision_size_obj9_parent'},[exp_id]);
+sub_list = setdiff(sub_list,[1207,1229]);
 
 %raw_data = csvread('child_dom_by_roi_target_exp12.csv', 4); 
 raw_data = csvread('joint_largest_by_roi_target_exp12.csv', 4); 
 
-child_roi_col = 40; % joint attend column  
+child_roi_col = 8;
+% child_roi_col = 40; % joint attend column  
 parent_roi_col = 14;
 obj_size_child_col =20; 
 obj_size_parent_col = 24;
@@ -44,7 +48,7 @@ figure(2);
 subplot(3,1,1);
 histogram(data(index,child_roi_col),'Normalization','probability');
 subplot(3,1,2);
-histogram(data(setdiff([1:size(data,1)],index),child_roi_col),'Normalization','probability');
+histogram(data(setdiff(1:size(data,1),index),child_roi_col),'Normalization','probability');
 
 
 % conditioned on child hold and parent hold
@@ -62,7 +66,7 @@ subplot(4,1,3);
 parent_only = setdiff(index2,both_inhand); 
 histogram(data(parent_only,child_roi_col),'Normalization','probability');
 subplot(4,1,4);
-index3=setdiff([1:size(data,1)],parent_only);
+index3=setdiff(1:size(data,1),parent_only);
 no_inhand= setdiff(index3,child_only);
 histogram(data(no_inhand,child_roi_col),'Normalization','probability');
 
@@ -72,21 +76,23 @@ histogram(data(no_inhand,child_roi_col),'Normalization','probability');
 
 %% VISUAL SIZE vs. ROI DURING HOLDING
 figure(4);
-index_roi_zero = find(data(index,child_roi_col)==0);
-index_roi_between = find(data(index,child_roi_col)<1 & data(index,child_roi_col)>0);
-index_roi_one = find(data(index,child_roi_col)==1);
-roi_size = size(data(index,child_roi_col),1);
+dom_mtr = data(index,child_roi_col);
+index_dom_zero = find(dom_mtr==0);
+index_dom_between = find(dom_mtr<1 & dom_mtr>0);
+index_dom_one = find(dom_mtr==1);
+dom_mtr_size = size(dom_mtr,1);
 
-index_no_roi_zero = find(data(setdiff(1:size(data,1),index),child_roi_col)==0);
-index_no_roi_between = find(data(setdiff(1:size(data,1),index),child_roi_col)<1 & data(setdiff([1:size(data,1)],index),child_roi_col)>0);
-index_no_roi_one = find(data(setdiff(1:size(data,1),index),child_roi_col)==1);
-no_roi_size = size(data(setdiff(1:size(data,1),index),child_roi_col),1);
+no_dom_mtr = data(setdiff(1:size(data,1),index),child_roi_col);
+index_no_dom_zero = find(no_dom_mtr==0);
+index_no_dom_between = find(no_dom_mtr<1 & no_dom_mtr>0);
+index_no_dom_one = find(data(setdiff(1:size(data,1),index),child_roi_col)==1);
+no_dom_size = size(no_dom_mtr,1);
 
 x = categorical({'0','0-1','1'});
 x = reordercats(x,{'0','0-1','1'});
-y_roi = [size(index_roi_zero,1)/roi_size,size(index_roi_between,1)/roi_size,size(index_roi_one,1)/roi_size];
-y_no_roi = [size(index_no_roi_zero,1)/no_roi_size,size(index_no_roi_between,1)/no_roi_size,size(index_no_roi_one,1)/no_roi_size];
-y = [y_roi;y_no_roi];
+y_dom = [numel(index_dom_zero)/dom_mtr_size,numel(index_dom_between)/dom_mtr_size,numel(index_dom_one)/dom_mtr_size];
+y_no_dom = [numel(index_no_dom_zero)/no_dom_size,numel(index_no_dom_between)/no_dom_size,numel(index_no_dom_one)/no_dom_size];
+y = [y_dom;y_no_dom];
 
 subplot(1,1,1);
 h=bar(x,y);
@@ -101,12 +107,45 @@ text(xtips1,ytips1,labels1,'HorizontalAlignment','center','VerticalAlignment','b
 text(xtips2,ytips2,labels2,'HorizontalAlignment','center','VerticalAlignment','bottom');
 
 
-title('Effect of Visual Size on Attention')
+title('Effect of Visual Size on Child''s Attention')
 xlabel('ROI Value')
 ylabel('Proportion')
 
-legend_labels = {'ROI','Not ROI'};
+legend_labels = {'dominant object','not dominant object'};
 legend(legend_labels);
+
+sub_mean_prop = [];
+
+[~,~,X] = unique(data(:,1));
+C = accumarray(X,1:size(data,1),[],@(r){data(r,:)});
+
+% sanity check counter --> count = numel(index)
+%  count = 0; 
+
+for i = 1:numel(sub_list)
+    sub_index = find(C{i}(:,obj_size_child_col)>dom_size);
+%     count = count + numel(sub_index);
+    
+    sub_index_dom_zero = find(C{i}(sub_index,child_roi_col)==0);
+    sub_index_dom_between = find(C{i}(sub_index,child_roi_col)<1 & C{i}(sub_index,child_roi_col)>0);
+    sub_index_dom_one = find(C{i}(sub_index,child_roi_col)==1);
+    sub_dom_size = size(C{i}(sub_index,child_roi_col),1);
+    
+    sub_index_no_dom_zero = find(C{i}(setdiff(1:size(C{i},1),sub_index),child_roi_col)==0);
+    sub_index_no_dom_between = find(C{i}(setdiff(1:size(C{i},1),sub_index),child_roi_col)<1 & C{i}(setdiff(1:size(C{i},1),sub_index),child_roi_col)>0);
+    sub_index_no_dom_one = find(C{i}(setdiff(1:size(C{i},1),sub_index),child_roi_col)==1);
+    sub_no_dom_size = size(C{i}(setdiff(1:size(C{i},1),sub_index),child_roi_col),1);
+
+    sub_y_dom = [size(sub_index_dom_zero,1)/sub_dom_size,size(sub_index_dom_between,1)/sub_dom_size,size(sub_index_dom_one,1)/sub_dom_size];
+    sub_y_no_dom = [size(sub_index_no_dom_zero,1)/sub_no_dom_size,size(sub_index_no_dom_between,1)/sub_no_dom_size,size(sub_index_no_dom_one,1)/sub_no_dom_size];
+    sub_y = [sub_y_dom,sub_y_no_dom];
+    sub_mean_prop = [sub_mean_prop;sub_y];
+end
+
+scatter(repmat(h(1).XEndPoints(1), size(sub_mean_prop,1), 1),sub_mean_prop(:,1),60,'MarkerFaceColor','r','MarkerEdgeColor','k','LineWidth',1)
+scatter(repmat(h(1).XEndPoints(2), size(sub_mean_prop,1), 1),sub_mean_prop(:,4),60,'MarkerFaceColor','r','MarkerEdgeColor','k','LineWidth',1)
+scatter(repmat(h(2).XEndPoints(1), size(sub_mean_prop,1), 1),sub_mean_prop(:,2),60,'MarkerFaceColor','y','MarkerEdgeColor','k','LineWidth',1)
+scatter(repmat(h(2).XEndPoints(2), size(sub_mean_prop,1), 1),sub_mean_prop(:,5),60,'MarkerFaceColor','y','MarkerEdgeColor','k','LineWidth',1)
 
 
 %% CONDITION ON CHILD HOLD vs. PARENT HOLD
@@ -171,7 +210,7 @@ text(xtips3_hand,ytips3_hand,labels3_hand,'HorizontalAlignment','center','Vertic
 text(xtips4_hand,ytips4_hand,labels4_hand,'HorizontalAlignment','center','VerticalAlignment','bottom');
 
 
-title('Effects of Holding on Attention')
+title('Effects of Holding on Child''s Attention')
 xlabel('ROI Value')
 ylabel('Proportion')
 
