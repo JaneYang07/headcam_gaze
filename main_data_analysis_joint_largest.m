@@ -110,13 +110,6 @@ text(xtips1,ytips1,labels1,'HorizontalAlignment','center','VerticalAlignment','b
 text(xtips2,ytips2,labels2,'HorizontalAlignment','center','VerticalAlignment','bottom');
 
 
-title('Effect of Visual Size on Child''s Attention')
-xlabel('ROI Value')
-ylabel('Proportion')
-
-legend_labels = {'dominant object','not dominant object'};
-legend(legend_labels);
-
 sub_mean_prop = [];
 
 [~,~,X] = unique(data(:,1));
@@ -145,16 +138,29 @@ for i = 1:numel(sub_list)
     sub_mean_prop = [sub_mean_prop;sub_y];
 end
 
-scatter(repmat(xtips1(1), size(sub_mean_prop,1), 1),sub_mean_prop(:,1),60,'MarkerFaceColor','r','MarkerEdgeColor','k','LineWidth',1)
-scatter(repmat(xtips2(1), size(sub_mean_prop,1), 1),sub_mean_prop(:,4),60,'MarkerFaceColor','y','MarkerEdgeColor','k','LineWidth',1)
-scatter(repmat(xtips1(2), size(sub_mean_prop,1), 1),sub_mean_prop(:,2),60,'MarkerFaceColor','r','MarkerEdgeColor','k','LineWidth',1)
-scatter(repmat(xtips2(2), size(sub_mean_prop,1), 1),sub_mean_prop(:,5),60,'MarkerFaceColor','y','MarkerEdgeColor','k','LineWidth',1)
-scatter(repmat(xtips1(3), size(sub_mean_prop,1), 1),sub_mean_prop(:,3),60,'MarkerFaceColor','r','MarkerEdgeColor','k','LineWidth',1)
-scatter(repmat(xtips2(3), size(sub_mean_prop,1), 1),sub_mean_prop(:,6),60,'MarkerFaceColor','y','MarkerEdgeColor','k','LineWidth',1)
+% scatter(repmat(xtips1(1), size(sub_mean_prop,1), 1),sub_mean_prop(:,1),60,'MarkerFaceColor','#B1D4E0','MarkerEdgeColor','k','LineWidth',0.5)
+% scatter(repmat(xtips2(1), size(sub_mean_prop,1), 1),sub_mean_prop(:,4),60,'MarkerFaceColor','#FF8300','MarkerEdgeColor','k','LineWidth',0.5)
+% scatter(repmat(xtips1(2), size(sub_mean_prop,1), 1),sub_mean_prop(:,2),60,'MarkerFaceColor','#B1D4E0','MarkerEdgeColor','k','LineWidth',0.5)
+% scatter(repmat(xtips2(2), size(sub_mean_prop,1), 1),sub_mean_prop(:,5),60,'MarkerFaceColor','#FF8300','MarkerEdgeColor','k','LineWidth',0.5)
+% scatter(repmat(xtips1(3), size(sub_mean_prop,1), 1),sub_mean_prop(:,3),60,'MarkerFaceColor','#B1D4E0','MarkerEdgeColor','k','LineWidth',0.5)
+% scatter(repmat(xtips2(3), size(sub_mean_prop,1), 1),sub_mean_prop(:,6),60,'MarkerFaceColor','#FF8300','MarkerEdgeColor','k','LineWidth',0.5)
+
+scatter(repmat(xtips1(1), size(sub_mean_prop,1), 1),sub_mean_prop(:,1),'Marker', 'o', 'MarkerEdgeAlpha',0.5);
+scatter(repmat(xtips2(1), size(sub_mean_prop,1), 1),sub_mean_prop(:,4),'Marker', 'o', 'MarkerEdgeAlpha',0.5);
+scatter(repmat(xtips1(2), size(sub_mean_prop,1), 1),sub_mean_prop(:,2),'Marker', 'o', 'MarkerEdgeAlpha',0.5);
+scatter(repmat(xtips2(2), size(sub_mean_prop,1), 1),sub_mean_prop(:,5),'Marker', 'o', 'MarkerEdgeAlpha',0.5);
+scatter(repmat(xtips1(3), size(sub_mean_prop,1), 1),sub_mean_prop(:,3),'Marker', 'o', 'MarkerEdgeAlpha',0.5);
+scatter(repmat(xtips2(3), size(sub_mean_prop,1), 1),sub_mean_prop(:,6),'Marker', 'o', 'MarkerEdgeAlpha',0.5);
 
 hold off
 
+title('Effect of Visual Size on Child''s Attention')
+xlabel('ROI Probability')
+ylabel('Proportion')
+xticklabels({'ROI Prop. = 0','0 < ROI Prop. < 1','ROI Prop. = 1'})
 
+legend_labels = {'dominant object','not dominant object'};
+legend(legend_labels);
 
 %% CONDITION ON CHILD HOLD vs. PARENT HOLD
 inhand_time = 0.5; 
@@ -200,6 +206,8 @@ y_hand = [y_both_inhand;y_child_only;y_parent_only;y_no_inhand];
 subplot(1,1,1);
 h_hand=bar(x,y_hand);
 
+hold on
+
 xtips1_hand = h_hand(1).XEndPoints;
 xtips2_hand = h_hand(2).XEndPoints;
 xtips3_hand = h_hand(3).XEndPoints;
@@ -218,9 +226,104 @@ text(xtips3_hand,ytips3_hand,labels3_hand,'HorizontalAlignment','center','Vertic
 text(xtips4_hand,ytips4_hand,labels4_hand,'HorizontalAlignment','center','VerticalAlignment','bottom');
 
 
+
+
+
+
+
+
+
+sub_hand_prop = [];
+
+% 
+% sanity check counter --> count = numel(child_only)
+ count = 0; 
+
+for i = 1:numel(sub_list)
+    sub_index1 = find(C{i}(:,child_inhand_col)>inhand_time);
+    sub_index2 = find(C{i}(:,parent_inhand_col)>inhand_time);
+    sub_both_inhand = intersect(sub_index1,sub_index2);
+    sub_child_only = setdiff(sub_index1,sub_both_inhand); 
+    sub_parent_only = setdiff(sub_index2,sub_both_inhand); 
+    sub_index3= setdiff(1:size(C{i},1),sub_parent_only);
+    sub_no_inhand= setdiff(sub_index3,sub_child_only);
+
+    count = count + numel(sub_child_only);
+
+    sub_index_both_inhand_zero = find(C{i}(sub_both_inhand,child_roi_col)==0);
+    sub_index_both_inhand_between = find(C{i}(sub_both_inhand,child_roi_col)>0 & C{i}(sub_both_inhand,child_roi_col)<1);
+    sub_index_both_inhand_one = find(C{i}(sub_both_inhand,child_roi_col)==1);
+    
+    sub_index_child_only_zero = find(C{i}(sub_child_only,child_roi_col)==0);
+    sub_index_child_only_between = find(C{i}(sub_child_only,child_roi_col)>0 & C{i}(sub_child_only,child_roi_col)<1);
+    sub_index_child_only_one = find(C{i}(sub_child_only,child_roi_col)==1);
+    
+    sub_index_parent_only_zero = find(C{i}(sub_parent_only,child_roi_col)==0);
+    sub_index_parent_only_between = find(C{i}(sub_parent_only,child_roi_col)>0 & C{i}(sub_parent_only,child_roi_col)<1);
+    sub_index_parent_only_one = find(C{i}(sub_parent_only,child_roi_col)==1);
+    
+    sub_index_no_inhand_zero = find(C{i}(sub_no_inhand,child_roi_col)==0);
+    sub_index_no_inhand_between = find(C{i}(sub_no_inhand,child_roi_col)>0 & C{i}(sub_no_inhand,child_roi_col)<1);
+    sub_index_no_inhand_one = find(C{i}(sub_no_inhand,child_roi_col)==1);
+    
+    
+    sub_both_inhand_size = size(C{i}(sub_both_inhand,child_roi_col),1);
+    sub_child_only_size = size(C{i}(sub_child_only,child_roi_col),1);
+    sub_parent_only_size = size(C{i}(sub_parent_only,child_roi_col),1);
+    sub_no_inhand_size = size(C{i}(sub_no_inhand,child_roi_col),1);
+    
+    sub_y_both_inhand = [size(sub_index_both_inhand_zero,1)/sub_both_inhand_size,size(sub_index_both_inhand_between,1)/sub_both_inhand_size,size(sub_index_both_inhand_one,1)/sub_both_inhand_size];
+    sub_y_child_only = [size(sub_index_child_only_zero,1)/sub_child_only_size,size(sub_index_child_only_between,1)/sub_child_only_size,size(sub_index_child_only_one,1)/sub_child_only_size];
+    sub_y_parent_only = [size(sub_index_parent_only_zero,1)/sub_parent_only_size,size(sub_index_parent_only_between,1)/sub_parent_only_size,size(sub_index_parent_only_one,1)/sub_parent_only_size];
+    sub_y_no_inhand = [size(sub_index_no_inhand_zero,1)/sub_no_inhand_size,size(sub_index_no_inhand_between,1)/sub_no_inhand_size,size(sub_index_no_inhand_one,1)/sub_no_inhand_size];
+    
+    sub_y_hand = [sub_y_both_inhand,sub_y_child_only,sub_y_parent_only,sub_y_no_inhand];
+
+    sub_hand_prop = [sub_hand_prop;sub_y_hand];
+end
+
+sub_hand_prop(isnan(sub_hand_prop))=0;
+
+
+% scatter(repmat(xtips1_hand(1), size(sub_hand_prop,1), 1),sub_hand_prop(:,1),60,'MarkerFaceColor','#B1D4E0','MarkerEdgeColor','k','LineWidth',0.5)
+% scatter(repmat(xtips2_hand(1), size(sub_hand_prop,1), 1),sub_hand_prop(:,4),60,'MarkerFaceColor','#FF8300','MarkerEdgeColor','k','LineWidth',0.5)
+% scatter(repmat(xtips3_hand(1), size(sub_hand_prop,1), 1),sub_hand_prop(:,7),60,'MarkerFaceColor','#B1D4E0','MarkerEdgeColor','k','LineWidth',0.5)
+% scatter(repmat(xtips4_hand(1), size(sub_hand_prop,1), 1),sub_hand_prop(:,10),60,'MarkerFaceColor','#FF8300','MarkerEdgeColor','k','LineWidth',0.5)
+% 
+% scatter(repmat(xtips1_hand(2), size(sub_hand_prop,1), 1),sub_hand_prop(:,2),60,'MarkerFaceColor','#B1D4E0','MarkerEdgeColor','k','LineWidth',0.5)
+% scatter(repmat(xtips2_hand(2), size(sub_hand_prop,1), 1),sub_hand_prop(:,5),60,'MarkerFaceColor','#FF8300','MarkerEdgeColor','k','LineWidth',0.5)
+% scatter(repmat(xtips3_hand(2), size(sub_hand_prop,1), 1),sub_hand_prop(:,8),60,'MarkerFaceColor','#B1D4E0','MarkerEdgeColor','k','LineWidth',0.5)
+% scatter(repmat(xtips4_hand(2), size(sub_hand_prop,1), 1),sub_hand_prop(:,11),60,'MarkerFaceColor','#FF8300','MarkerEdgeColor','k','LineWidth',0.5)
+% 
+% scatter(repmat(xtips1_hand(3), size(sub_hand_prop,1), 1),sub_hand_prop(:,3),60,'MarkerFaceColor','#B1D4E0','MarkerEdgeColor','k','LineWidth',0.5)
+% scatter(repmat(xtips2_hand(3), size(sub_hand_prop,1), 1),sub_hand_prop(:,6),60,'MarkerFaceColor','#FF8300','MarkerEdgeColor','k','LineWidth',0.5)
+% scatter(repmat(xtips3_hand(3), size(sub_hand_prop,1), 1),sub_hand_prop(:,9),60,'MarkerFaceColor','#B1D4E0','MarkerEdgeColor','k','LineWidth',0.5)
+% scatter(repmat(xtips4_hand(3), size(sub_hand_prop,1), 1),sub_hand_prop(:,12),60,'MarkerFaceColor','#FF8300','MarkerEdgeColor','k','LineWidth',0.5)
+
+
+scatter(repmat(xtips1_hand(1), size(sub_hand_prop,1), 1),sub_hand_prop(:,1),'Marker', 'o', 'MarkerEdgeAlpha', 0.5);
+scatter(repmat(xtips2_hand(1), size(sub_hand_prop,1), 1),sub_hand_prop(:,4),'Marker', 'o', 'MarkerEdgeAlpha', 0.5);
+scatter(repmat(xtips3_hand(1), size(sub_hand_prop,1), 1),sub_hand_prop(:,7),'Marker', 'o', 'MarkerEdgeAlpha', 0.5);
+scatter(repmat(xtips4_hand(1), size(sub_hand_prop,1), 1),sub_hand_prop(:,10),'Marker', 'o', 'MarkerEdgeAlpha', 0.5);
+
+scatter(repmat(xtips1_hand(2), size(sub_hand_prop,1), 1),sub_hand_prop(:,2),'Marker', 'o', 'MarkerEdgeAlpha', 0.5);
+scatter(repmat(xtips2_hand(2), size(sub_hand_prop,1), 1),sub_hand_prop(:,5),'Marker', 'o', 'MarkerEdgeAlpha', 0.5);
+scatter(repmat(xtips3_hand(2), size(sub_hand_prop,1), 1),sub_hand_prop(:,8),'Marker', 'o', 'MarkerEdgeAlpha', 0.5);
+scatter(repmat(xtips4_hand(2), size(sub_hand_prop,1), 1),sub_hand_prop(:,11),'Marker', 'o', 'MarkerEdgeAlpha', 0.5);
+
+scatter(repmat(xtips1_hand(3), size(sub_hand_prop,1), 1),sub_hand_prop(:,3),'Marker', 'o', 'MarkerEdgeAlpha', 0.5);
+scatter(repmat(xtips2_hand(3), size(sub_hand_prop,1), 1),sub_hand_prop(:,6),'Marker', 'o', 'MarkerEdgeAlpha', 0.5);
+scatter(repmat(xtips3_hand(3), size(sub_hand_prop,1), 1),sub_hand_prop(:,9),'Marker', 'o', 'MarkerEdgeAlpha', 0.5);
+scatter(repmat(xtips4_hand(3), size(sub_hand_prop,1), 1),sub_hand_prop(:,12),'Marker', 'o', 'MarkerEdgeAlpha', 0.5);
+
+hold off
+
+
 title('Effects of Holding on Child''s Attention')
-xlabel('ROI Value')
+xlabel('ROI Probability')
 ylabel('Proportion')
+xticklabels({'ROI Prop. = 0','0 < ROI Prop. < 1','ROI Prop. = 1'})
+
 
 legend_labels_hand = {'both inhand','child only','parent only','no inhand'};
 legend(legend_labels_hand);
