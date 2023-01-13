@@ -6,8 +6,8 @@ sub_list = setdiff(sub_list,[1207,1229]);
 %raw_data = csvread('child_dom_by_roi_target_exp12.csv', 4); 
 raw_data = csvread('joint_largest_by_roi_target_exp12.csv', 4); 
 
-child_roi_col = 8;
-% child_roi_col = 40; % joint attend column  
+%child_roi_col = 8;
+child_roi_col = 40; % joint attend column  
 parent_roi_col = 14;
 obj_size_child_col =20; 
 obj_size_parent_col = 24;
@@ -88,8 +88,8 @@ index_no_dom_between = find(no_dom_mtr<1 & no_dom_mtr>0);
 index_no_dom_one = find(data(setdiff(1:size(data,1),index),child_roi_col)==1);
 no_dom_size = size(no_dom_mtr,1);
 
-x = categorical({'0','0-1','1'});
-x = reordercats(x,{'0','0-1','1'});
+% x = categorical({'0','0-1','1'});
+% x = reordercats(x,{'0','0-1','1'});
 x = [1 2 3];
 y_dom = [numel(index_dom_zero)/dom_mtr_size,numel(index_dom_between)/dom_mtr_size,numel(index_dom_one)/dom_mtr_size];
 y_no_dom = [numel(index_no_dom_zero)/no_dom_size,numel(index_no_dom_between)/no_dom_size,numel(index_no_dom_one)/no_dom_size];
@@ -154,7 +154,7 @@ scatter(repmat(xtips2(3), size(sub_mean_prop,1), 1),sub_mean_prop(:,6),'Marker',
 
 hold off
 
-title('Effect of Visual Size on Child''s Attention')
+title('Effect of Visual Size on Joint Attention')
 xlabel('ROI Probability')
 ylabel('Proportion')
 xticklabels({'ROI Prop. = 0','0 < ROI Prop. < 1','ROI Prop. = 1'})
@@ -319,7 +319,7 @@ scatter(repmat(xtips4_hand(3), size(sub_hand_prop,1), 1),sub_hand_prop(:,12),'Ma
 hold off
 
 
-title('Effects of Holding on Child''s Attention')
+title('Effects of Holding on Joint Attention')
 xlabel('ROI Probability')
 ylabel('Proportion')
 xticklabels({'ROI Prop. = 0','0 < ROI Prop. < 1','ROI Prop. = 1'})
