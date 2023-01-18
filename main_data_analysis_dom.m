@@ -23,7 +23,7 @@ subplot(3,1,1);
 histogram(data(:,child_roi_col),'Normalization','probability');
 subplot(3,1,2);
 histogram(data(:,obj_size_col),'Normalization','probability');
-%histogram(data(:,parent_inhand_col)+data(:,child_inhand_col),'Normaliz ation','probability');
+%histogram(data(:,parent_inhand_col)+data(:,child_inhand_col),'Normalization','probability');
 
 % divide into visual size, and compare roi during holding 
 dom_size = 0.10; 
